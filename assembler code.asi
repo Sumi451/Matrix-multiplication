@@ -1,0 +1,77 @@
+; Initialize HL with the address of the first matrix (Matrix A)
+LXI H, 4200H
+
+; Initialize DE with the address of the second matrix (Matrix B)
+LXI D, 4300H
+
+; Call MUL to multiply elements and store results
+CALL MUL
+STA 4500H
+LXI H,4201H
+LXI D, 4302H
+CALL MUL
+STA 4501H
+CALL ABR
+STA 4600H;1st element
+
+LXI H,4200H
+LXI D, 4301H
+CALL MUL
+STA 4500H
+LXI H,4201H
+LXI D,4303H
+CALL MUL
+STA 4501H
+CALL ABR
+STA 4601H;2nd element
+
+LXI H,4100H 
+MOV A, M
+
+CPI 01H
+JZ END
+CPI 02H
+JZ CONTINUE
+
+CONTINUE:LXI H,4202H
+LXI D,4300H
+CALL MUL
+STA 4500H
+LXI H,4203H
+LXI D,4302H
+CALL MUL
+STA 4501H
+CALL ABR
+STA 4602H;3RD EKEEMNT
+
+LXI H,4202H
+LXI D,4301H
+CALL MUL
+STA 4500H
+LXI H, 4203H
+LXI D, 4303H
+CALL MUL
+STA 4501H
+CALL ABR
+STA 4603H;4TH ELEMENT
+
+
+
+END: HLT
+
+; Subroutine to multiply two values and store the result in A
+MUL: MOV A,M
+MOV C,A
+LDAX D
+MOV B,A
+MVI A,00H
+L1: ADD B
+DCR C
+JNZ L1
+RET
+
+ABR:  LXI H, 4500H
+MOV A,M
+INX H
+ADD M
+RET
